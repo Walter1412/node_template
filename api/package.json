@@ -2,13 +2,18 @@
   "name": "api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "src/app.ts",
   "scripts": {
-    "dev": "tsc",
+    "start": "nodemon",
+    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "Nodejs",
+    "typescript",
+    "express"
+  ],
+  "author": "Walter1412",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1"
@@ -21,6 +26,7 @@
     "eslint": "^7.18.0",
     "nodemon": "^2.0.7",
     "prettier": "2.2.1",
+    "ts-node": "^9.1.1",
     "typescript": "^4.1.3"
   }
 }
