@@ -8,7 +8,7 @@ import Logger from './logger';
 
 export default async ({ expressApp }) => {
   // const mongoConnection = await mongooseLoader();
-  Logger.info('✌️ DB loaded and connected!');
+  // Logger.info('✌️ DB loaded and connected!');
 
   /**
    * WTF is going on here?
@@ -36,7 +36,7 @@ export default async ({ expressApp }) => {
   Logger.info('✌️ Dependency Injector loaded');
 
   // await jobsLoader({ agenda });
-  Logger.info('✌️ Jobs loaded');
+  // Logger.info('✌️ Jobs loaded');
 
   await expressLoader({ app: expressApp });
   Logger.info('✌️ Express loaded');

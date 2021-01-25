@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const envFound = dotenv.config();
+
 if (envFound.error) {
   // This error should crash whole process
 
@@ -14,7 +15,7 @@ export default {
   /**
    * Your favorite port
    */
-  port: parseInt(process.env.PORT, 10),
+  port: parseInt(typeof process.env.PORT === 'string' ? process.env.PORT : '3000', 10),
 
   /**
    * That long string from mlab
@@ -30,9 +31,9 @@ export default {
   /**
    * Used by winston logger
    */
-  // logs: {
-  //   level: process.env.LOG_LEVEL || 'silly',
-  // },
+  logs: {
+    level: process.env.LOG_LEVEL || 'silly',
+  },
 
   /**
    * Agenda.js stuff

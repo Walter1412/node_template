@@ -16,8 +16,10 @@
   "author": "Walter1412",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "method-override": "^3.0.0",
     "winston": "^3.3.3"
   },
   "devDependencies": {
