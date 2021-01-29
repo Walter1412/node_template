@@ -7,4 +7,5 @@ export default (app: Router) => {
   route.get('/', (req: Request, res: Response) => {
     res.send('Hello World!');
   });
+
 };

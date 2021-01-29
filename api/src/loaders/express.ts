@@ -1,8 +1,10 @@
-import express from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import routes from '../api';
 import config from '../config';
+
+// import { ResolveOptions } from 'dns';
 export default ({ app }: { app: express.Application }) => {
   /**
    * Health Check endpoints
@@ -36,25 +38,22 @@ export default ({ app }: { app: express.Application }) => {
 
   /// catch 404 and forward to error handler
   app.use((req, res, next) => {
-    const err = new Error('Not Found');
+    const err: any = new Error('NoFound');
     err['status'] = 404;
     next(err);
   });
 
   /// error handlers
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     /**
      * Handle 401 thrown by express-jwt library
      */
     if (err.name === 'UnauthorizedError') {
-      return res
-        .status(err.status)
-        .send({ message: err.message })
-        .end();
+      return res.status(err.status).send({ message: err.message }).end();
     }
     return next(err);
   });
-  app.use((err, req, res, next) => {
+  app.use((err: any, req: Request, res: Response, next: NextFunction) => {
     res.status(err.status || 500);
     res.json({
       errors: {
