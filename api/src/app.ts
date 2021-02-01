@@ -1,4 +1,4 @@
-// import express, { Application, Request, Response, NextFunction } from 'express';
+import express, { Application, Request, Response, NextFunction } from 'express';
 // const app = express();
 // const port = 3000;
 
@@ -11,11 +11,11 @@
 // });
 
 import config from './config';
-import express from 'express';
+// import express from 'express';
 import Logger from './loaders/logger';
 
 async function startServer() {
-  const app = express();
+  const app: Application = express();
 
   /**
    * A little hack here
