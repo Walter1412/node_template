@@ -1,5 +1,6 @@
 import expressLoader from './express';
 import { Application } from 'express';
+import sequelizeLoader from './sequelize';
 // import dependencyInjectorLoader from './dependencyInjector';
 // import mongooseLoader from './mongoose';
 // import jobsLoader from './jobs';
@@ -8,13 +9,14 @@ import Logger from './logger';
 // import './events';
 
 interface defaultInit {
-  expressApp: Application
+  expressApp: Application;
 }
 
 export default async (init: defaultInit) => {
   // const mongoConnection = await mongooseLoader();
   // Logger.info('✌️ DB loaded and connected!');
-
+  const sequelizeConnection = await sequelizeLoader();
+  Logger.info('✌️ DB loaded and connected!');
   /**
    * WTF is going on here?
    *

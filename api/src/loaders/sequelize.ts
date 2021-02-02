@@ -1,17 +1,13 @@
 const { Sequelize } = require('sequelize');
+import Logger from './logger';
 
-// Option 1: Passing a connection URI
-const sequelize = new Sequelize('sqlite::memory:') // Example for sqlite
-const sequelize = new Sequelize('postgres://user:pass@example.com:5432/dbname') // Example for postgres
+export default async () => {
+  const sequelize = new Sequelize('test', 'cloud', 'Cloud1234', {
+    host: '10.1.1.104',
+    port: '1066',
+    dialect: 'mysql' /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */,
+    logging: (msg: any) => Logger.debug(msg),
+  });
 
-// Option 2: Passing parameters separately (sqlite)
-const sequelize = new Sequelize({
-  dialect: 'sqlite',
-  storage: 'path/to/database.sqlite'
-});
-
-// Option 2: Passing parameters separately (other dialects)
-const sequelize = new Sequelize('database', 'username', 'password', {
-  host: 'localhost',
-  dialect: /* one of 'mysql' | 'mariadb' | 'postgres' | 'mssql' */
-});
+  return sequelize.authenticate();
+};
