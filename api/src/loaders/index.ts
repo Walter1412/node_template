@@ -16,7 +16,7 @@ interface defaultInit {
 export default async (init: defaultInit) => {
   // const mongoConnection = await mongooseLoader();
   // Logger.info('✌️ DB loaded and connected!');
-  const sequelize = await sequelizeLoader();
+  const sequelize = sequelizeLoader();
   const sequelizeConnection = await sequelize.authenticate();
   Logger.info('✌️ DB loaded and connected!');
   /**
