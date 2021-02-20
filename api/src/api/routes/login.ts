@@ -1,17 +1,12 @@
 import { Router, Request, Response } from 'express';
 import { celebrate, Joi } from 'celebrate';
-import SequelizeLoader from '../../loaders/sequelize';
-import UserModel from '../../db/models/user.js';
-
+import Auth from '../../services/auth';
 const route = Router();
-const sequlize = SequelizeLoader();
-const User = UserModel(sequlize);
-
+const auth = new Auth();
 export default async (app: Router) => {
   app.use('/login', route);
   route.get('/', async (req: Request, res: Response) => {
-    const user = await User.findAll();
-    res.send(user);
+    res.send('Hello');
   });
   route.post(
     '/',
@@ -25,12 +20,13 @@ export default async (app: Router) => {
     async (req: Request, res: Response) => {
       const { body } = req;
       const { email } = body;
-      const user = await User.findOne({
-        where: {
-          email: email,
-        },
-      });
-      res.json(user).status(200).end();
+      // const user = await User.findOne({
+      //   where: {
+      //     email: email,
+      //   },
+      // });
+      console.log(auth.signIn(email));
+      res.json('Hello').status(200).end();
     },
   );
 };
