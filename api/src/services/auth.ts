@@ -15,16 +15,31 @@ export default class Auth {
     this.logger = Logger;
   }
   async signUp(userInputDTO: IUserInputDTO) {
-    const salt = randomBytes(32);
-    const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
+    try {
+      const salt = randomBytes(32);
+      const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
+      this.logger.silly('Creating user db record');
+      const userRecord = await this.User.create({
+        ...userInputDTO,
+        salt: salt.toString('hex'),
+        password: hashedPassword,
+      });
+      await userRecord.save();
+      console.log('userRecord :>> ', userRecord);
+      return { userRecord };
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
+    }
   }
-  async signIn(email: string) {
+  async signIn(email: string, password: string) {
     const userRecord = await this.User.findOne({
       where: {
         email,
       },
     });
     if (!userRecord) throw new Error('User not registered');
+    this.logger.silly('Hashing password');
 
     return userRecord;
   }

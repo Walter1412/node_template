@@ -12,20 +12,16 @@ export default async (app: Router) => {
     '/',
     celebrate({
       body: Joi.object({
-        name: Joi.string(),
+        firstName: Joi.string(),
+        lastName: Joi.string(),
         email: Joi.string().required(),
         password: Joi.string().required(),
       }),
     }),
     async (req: Request, res: Response) => {
       const { body } = req;
-      const { email } = body;
-      // const user = await User.findOne({
-      //   where: {
-      //     email: email,
-      //   },
-      // });
-      console.log(auth.signIn(email));
+      const { firstName, lastName, email, password } = body;
+      console.log(auth.signUp({ firstName, lastName, email, password }));
       res.json('Hello').status(200).end();
     },
   );
