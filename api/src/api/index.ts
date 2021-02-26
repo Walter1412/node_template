@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import login from './routes/login';
+import login from './routes/user';
 
 // guaranteed to get dependencies
 export default () => {

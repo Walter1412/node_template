@@ -14,19 +14,19 @@ export default class Auth {
     this.User = UserModel(sequelize);
     this.logger = Logger;
   }
-  async signUp(userInputDTO: IUserInputDTO) {
+  async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser }> {
     try {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
       this.logger.silly('Creating user db record');
-      const userRecord = await this.User.create({
+
+      const user = await this.User.create({
         ...userInputDTO,
         salt: salt.toString('hex'),
         password: hashedPassword,
       });
-      await userRecord.save();
-      console.log('userRecord :>> ', userRecord);
-      return { userRecord };
+      await user.save();
+      return { user };
     } catch (error) {
       this.logger.error(error);
       throw error;
