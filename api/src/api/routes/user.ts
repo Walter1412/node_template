@@ -1,29 +1,29 @@
 import { Router, Request, Response } from 'express';
 import { celebrate, Joi } from 'celebrate';
 import Auth from '../../services/auth';
+import Result from '../../services/result';
 const route = Router();
 const auth = new Auth();
-import { IUser } from '../interfaces/IUser';
+const result = new Result();
 export default async (app: Router) => {
   app.use('/user', route);
   route.get('/', async (req: Request, res: Response) => {
     res.send('Hello');
   });
   route.post(
-    '/',
+    '/singin',
     celebrate({
       body: Joi.object({
-        firstName: Joi.string(),
-        lastName: Joi.string(),
         email: Joi.string().required(),
         password: Joi.string().required(),
       }),
     }),
     async (req: Request, res: Response) => {
       const { body } = req;
-      const { firstName, lastName, email, password } = body;
-      console.log(auth.signUp({ firstName, lastName, email, password }));
-      res.json('Hello').status(200).end();
+      const { email, password } = body;
+
+      await auth.signIn(email, password);
+      res.json(result.sucess()).status(200).end();
     },
   );
   route.post(
@@ -41,7 +41,7 @@ export default async (app: Router) => {
       const { firstName, lastName, email, password } = body;
       const { user } = await auth.signUp({ firstName, lastName, email, password });
 
-      res.json(user).status(200).end();
+      res.json(result.sucess()(user)).status(200).end();
     },
   );
 };

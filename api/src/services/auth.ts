@@ -14,19 +14,19 @@ export default class Auth {
     this.User = UserModel(sequelize);
     this.logger = Logger;
   }
-  async signUp(userInputDTO: IUserInputDTO): Promise<{ user: IUser }> {
+  async signUp(userInputDTO: IUserInputDTO): Promise<{ createUser: IUser }> {
     try {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
       this.logger.silly('Creating user db record');
 
-      const user = await this.User.create({
+      const createUser = await this.User.create({
         ...userInputDTO,
         salt: salt.toString('hex'),
         password: hashedPassword,
       });
-      await user.save();
-      return { user };
+      await createUser.save();
+      return { createUser };
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -38,9 +38,11 @@ export default class Auth {
         email,
       },
     });
-    if (!userRecord) throw new Error('User not registered');
-    this.logger.silly('Hashing password');
-
+    console.log('userRecord :>> ', userRecord);
+    // if (!userRecord) throw new Error('User not registered');
+    // this.logger.silly('Hashing password');
+    // const validPassword = await argon2.verify(userRecord.password, password);
+    // console.log('validPassword :>> ', validPassword);
     return userRecord;
   }
   private generateToken(user) {
