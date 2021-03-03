@@ -15,7 +15,15 @@ module.exports = sequelize => {
     {
       firstName: DataTypes.STRING,
       lastName: DataTypes.STRING,
-      email: DataTypes.STRING,
+      email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+          notEmpty: true,
+          isEmail: true,
+        },
+        unique: true,
+      },
       password: DataTypes.STRING,
       slat: DataTypes.STRING,
     },

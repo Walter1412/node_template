@@ -37,11 +37,14 @@ export default async (app: Router) => {
       }),
     }),
     async (req: Request, res: Response) => {
-      const { body } = req;
-      const { firstName, lastName, email, password } = body;
-      const { user } = await auth.signUp({ firstName, lastName, email, password });
-
-      res.json(result.sucess()(user)).status(200).end();
+      try {
+        const { body } = req;
+        const { firstName, lastName, email, password } = body;
+        const { createUser } = await auth.signUp({ firstName, lastName, email, password });
+        res.json(result.sucess()(createUser)).status(200).end();
+      } catch (error) {
+        res.json(result.fail()(error.errors[0].message));
+      }
     },
   );
 };

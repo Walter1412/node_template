@@ -16,6 +16,8 @@ module.exports = {
         firstName: 'John',
         lastName: 'Doe',
         email: 'example@example.com',
+        password: 'test',
+        slat: 'test',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

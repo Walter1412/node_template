@@ -18,11 +18,11 @@ module.exports = {
           },
           { transaction: t },
         ),
-        queryInterface.addConstraint('Users', {
-          fields: ['email'],
-          type: 'unique',
-          name: 'custom_unique_constraint_name',
-        }),
+        // queryInterface.addConstraint('Users', {
+        //   fields: ['email'],
+        //   type: 'unique',
+        //   name: 'custom_unique_constraint_name',
+        // }),
       ]);
     });
   },

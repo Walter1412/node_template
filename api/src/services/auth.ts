@@ -25,7 +25,7 @@ export default class Auth {
         salt: salt.toString('hex'),
         password: hashedPassword,
       });
-      await createUser.save();
+
       return { createUser };
     } catch (error) {
       this.logger.error(error);
