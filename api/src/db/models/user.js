@@ -25,7 +25,7 @@ module.exports = sequelize => {
         unique: true,
       },
       password: DataTypes.STRING,
-      slat: DataTypes.STRING,
+      salt: DataTypes.STRING,
     },
     {
       sequelize,

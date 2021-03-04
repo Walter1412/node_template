@@ -1,13 +1,14 @@
 import SequelizeLoader from '../loaders/sequelize';
-import { randomBytes } from 'crypto';
-import { Model } from '@types/sequelize';
-import UserModel from '../db/models/user.js';
-import argon2 from 'argon2';
-import { IUser, IUserInputDTO } from '../interfaces/IUser';
 import Logger from '../loaders/logger';
+import jwt from 'jsonwebtoken';
+import argon2 from 'argon2';
+import UserModel from '../db/models/user.js';
+import config from '../config/index';
+import { randomBytes } from 'crypto';
+import { IUser, IUserInputDTO } from '../interfaces/IUser';
 
 export default class Auth {
-  private User: Model;
+  private User: any;
   private logger: any;
   constructor() {
     const sequelize = SequelizeLoader();
@@ -32,38 +33,35 @@ export default class Auth {
       throw error;
     }
   }
-  async signIn(email: string, password: string) {
+  async signIn(email: string, password: string): Promise<{ token?: string }> {
     const userRecord = await this.User.findOne({
       where: {
         email,
       },
     });
-    console.log('userRecord :>> ', userRecord);
-    // if (!userRecord) throw new Error('User not registered');
-    // this.logger.silly('Hashing password');
-    // const validPassword = await argon2.verify(userRecord.password, password);
-    // console.log('validPassword :>> ', validPassword);
+
+    if (!userRecord) throw new Error('User not registered');
+    this.logger.silly('Checking password');
+    const validPassword = await argon2.verify(userRecord.password, password);
+
+    if (validPassword) {
+      this.logger.silly('Password is valid!');
+      this.logger.silly('Generating JWT');
+      const token = this.generateToken(userRecord);
+      return { token };
+    } else {
+      throw new Error('Invalid Password');
+    }
     return userRecord;
   }
-  private generateToken(user) {
+  private generateToken(user: IUser) {
     const today = new Date();
     const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
-
-    /**
-     * A JWT means JSON Web Token, so basically it's a json that is _hashed_ into a string
-     * The cool thing is that you can add custom properties a.k.a metadata
-     * Here we are adding the userId, role and name
-     * Beware that the metadata is public and can be decoded without _the secret_
-     * but the client cannot craft a JWT to fake a userId
-     * because it doesn't have _the secret_ to sign it
-     * more information here: https://softwareontheroad.com/you-dont-need-passport
-     */
     this.logger.silly(`Sign JWT for userId: ${user._id}`);
     return jwt.sign(
       {
         _id: user._id, // We are gonna use this in the middleware 'isAuth'
-        role: user.role,
         name: user.name,
         exp: exp.getTime() / 1000,
       },

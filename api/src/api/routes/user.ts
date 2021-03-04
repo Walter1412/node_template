@@ -14,7 +14,7 @@ export default async (app: Router) => {
     '/singin',
     celebrate({
       body: Joi.object({
-        email: Joi.string().required(),
+        email: Joi.string().required().email(),
         password: Joi.string().required(),
       }),
     }),
@@ -22,8 +22,8 @@ export default async (app: Router) => {
       const { body } = req;
       const { email, password } = body;
 
-      await auth.signIn(email, password);
-      res.json(result.sucess()).status(200).end();
+      const { token } = await auth.signIn(email, password);
+      res.json(result.sucess()(token)).status(200).end();
     },
   );
   route.post(
@@ -32,7 +32,7 @@ export default async (app: Router) => {
       body: Joi.object({
         firstName: Joi.string(),
         lastName: Joi.string(),
-        email: Joi.string().required(),
+        email: Joi.string().required().email(),
         password: Joi.string().required(),
       }),
     }),
