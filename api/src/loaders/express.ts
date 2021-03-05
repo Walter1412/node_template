@@ -5,7 +5,7 @@ import routes from '../api';
 import config from '../config';
 
 // import { ResolveOptions } from 'dns';
-export default ({ app }: { app: express.Application }) => {
+export default ({ app }: { app: Application }) => {
   /**
    * Health Check endpoints
    * @TODO Explain why they are here

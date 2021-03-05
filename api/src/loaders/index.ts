@@ -1,6 +1,7 @@
 import expressLoader from './express';
 import { Application } from 'express';
 import sequelizeLoader from './sequelize';
+import swaggerLoader from './swagger';
 // import dependencyInjectorLoader from './dependencyInjector';
 // import mongooseLoader from './mongoose';
 // import jobsLoader from './jobs';
@@ -46,6 +47,9 @@ export default async (init: defaultInit) => {
 
   // await jobsLoader({ agenda });
   // Logger.info('✌️ Jobs loaded');
+
+  await swaggerLoader({ app: init.expressApp });
+  Logger.info('✌️ Swagger loaded');
 
   await expressLoader({ app: init.expressApp });
   Logger.info('✌️ Express loaded');

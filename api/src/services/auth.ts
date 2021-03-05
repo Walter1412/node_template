@@ -34,25 +34,28 @@ export default class Auth {
     }
   }
   async signIn(email: string, password: string): Promise<{ token?: string }> {
-    const userRecord = await this.User.findOne({
-      where: {
-        email,
-      },
-    });
+    try {
+      const userRecord = await this.User.findOne({
+        where: {
+          email,
+        },
+      });
+      if (!userRecord) throw new Error('User not registered');
+      this.logger.silly('Checking password');
+      const validPassword = await argon2.verify(userRecord.password, password);
 
-    if (!userRecord) throw new Error('User not registered');
-    this.logger.silly('Checking password');
-    const validPassword = await argon2.verify(userRecord.password, password);
-
-    if (validPassword) {
-      this.logger.silly('Password is valid!');
-      this.logger.silly('Generating JWT');
-      const token = this.generateToken(userRecord);
-      return { token };
-    } else {
-      throw new Error('Invalid Password');
+      if (validPassword) {
+        this.logger.silly('Password is valid!');
+        this.logger.silly('Generating JWT');
+        const token = this.generateToken(userRecord);
+        return { token };
+      } else {
+        throw new Error('Invalid Password');
+      }
+    } catch (error) {
+      this.logger.error(error);
+      throw error;
     }
-    return userRecord;
   }
   private generateToken(user: IUser) {
     const today = new Date();
@@ -62,7 +65,7 @@ export default class Auth {
     return jwt.sign(
       {
         _id: user._id, // We are gonna use this in the middleware 'isAuth'
-        name: user.name,
+        email: user.email,
         exp: exp.getTime() / 1000,
       },
       config.jwtSecret,
