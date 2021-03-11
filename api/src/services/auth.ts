@@ -2,32 +2,32 @@ import SequelizeLoader from '../loaders/sequelize';
 import Logger from '../loaders/logger';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
-import UserModel from '../db/models/user.js';
+import UserAccountModel from '../db/models/userAccount.js';
 import config from '../config/index';
 import { randomBytes } from 'crypto';
-import { IUser, IUserInputDTO } from '../interfaces/IUser';
+import { IUserAccount, IUserAccountInputDTO } from '../interfaces/IUserAccount';
 
 export default class Auth {
-  private User: any;
+  private UserAccount: any;
   private logger: any;
   constructor() {
     const sequelize = SequelizeLoader();
-    this.User = UserModel(sequelize);
+    this.UserAccount = UserAccountModel(sequelize);
     this.logger = Logger;
   }
-  async signUp(userInputDTO: IUserInputDTO): Promise<{ createUser: IUser }> {
+  async signUp(userAccountInputDTO: IUserAccountInputDTO): Promise<{ createUserAccount: IUserAccount }> {
     try {
       const salt = randomBytes(32);
-      const hashedPassword = await argon2.hash(userInputDTO.password, { salt });
+      const hashedPassword = await argon2.hash(userAccountInputDTO.password, { salt });
       this.logger.silly('Creating user db record');
 
-      const createUser = await this.User.create({
-        ...userInputDTO,
+      const createUserAccount = await this.UserAccount.create({
+        ...userAccountInputDTO,
         salt: salt.toString('hex'),
         password: hashedPassword,
       });
 
-      return { createUser };
+      return { createUserAccount };
     } catch (error) {
       this.logger.error(error);
       throw error;
@@ -35,7 +35,7 @@ export default class Auth {
   }
   async signIn(email: string, password: string): Promise<{ token?: string }> {
     try {
-      const userRecord = await this.User.findOne({
+      const userRecord = await this.UserAccount.findOne({
         where: {
           email,
         },
@@ -57,7 +57,7 @@ export default class Auth {
       throw error;
     }
   }
-  private generateToken(user: IUser) {
+  private generateToken(user: IUserAccount) {
     const today = new Date();
     const exp = new Date(today);
     exp.setDate(today.getDate() + 60);
@@ -65,7 +65,7 @@ export default class Auth {
     return jwt.sign(
       {
         _id: user._id, // We are gonna use this in the middleware 'isAuth'
-        email: user.email,
+        email: user.account,
         exp: exp.getTime() / 1000,
       },
       config.jwtSecret,

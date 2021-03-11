@@ -43,7 +43,7 @@ export default async (init: defaultInit) => {
   //     // whateverModel
   //   ],
   // });
-  Logger.info('✌️ Dependency Injector loaded');
+  // Logger.info('✌️ Dependency Injector loaded');
 
   // await jobsLoader({ agenda });
   // Logger.info('✌️ Jobs loaded');

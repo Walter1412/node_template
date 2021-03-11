@@ -63,18 +63,17 @@ export default async (app: Router) => {
     '/signup',
     celebrate({
       body: Joi.object({
-        firstName: Joi.string(),
-        lastName: Joi.string(),
-        email: Joi.string().required().email(),
+        name: Joi.string(),
+        account: Joi.string().required().email(),
         password: Joi.string().required(),
       }),
     }),
     async (req: Request, res: Response) => {
       try {
         const { body } = req;
-        const { firstName, lastName, email, password } = body;
-        const { createUser } = await auth.signUp({ firstName, lastName, email, password });
-        res.json(result.sucess()(createUser)).status(200).end();
+        const { name, account, password } = body;
+        const { createUserAccount } = await auth.signUp({ name, account, password });
+        res.json(result.sucess()(createUserAccount)).status(200).end();
       } catch (error) {
         res.json(result.fail()(error.errors[0].message));
       }
