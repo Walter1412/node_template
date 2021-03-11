@@ -2,6 +2,7 @@ import SequelizeLoader from '../loaders/sequelize';
 import Logger from '../loaders/logger';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
+import { v1 as uuidv1 } from 'uuid';
 import UserAccountModel from '../db/models/userAccount.js';
 import config from '../config/index';
 import { randomBytes } from 'crypto';
@@ -23,6 +24,7 @@ export default class Auth {
 
       const createUserAccount = await this.UserAccount.create({
         ...userAccountInputDTO,
+        no: uuidv1(),
         salt: salt.toString('hex'),
         password: hashedPassword,
       });

@@ -20,11 +20,11 @@ module.exports = sequelize => {
       },
       account: {
         type: DataTypes.STRING,
-        allowNull: false,
         validate: {
           notEmpty: true,
           isEmail: true,
         },
+        allowNull: false,
         unique: true,
       },
       name: {
@@ -50,11 +50,9 @@ module.exports = sequelize => {
       },
       createdUser: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
       updatedUser: {
         type: DataTypes.INTEGER,
-        allowNull: false,
       },
       salt: {
         type: DataTypes.STRING,
