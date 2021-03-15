@@ -75,7 +75,7 @@ export default async (app: Router) => {
         const { createUserAccount } = await auth.signUp({ name, account, password });
         res.json(result.sucess()(createUserAccount)).status(200).end();
       } catch (error) {
-        res.json(result.fail()(error.errors[0].message));
+        res.json(result.fail()(error));
       }
     },
   );

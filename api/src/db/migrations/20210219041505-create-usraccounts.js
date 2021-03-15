@@ -22,6 +22,12 @@ module.exports = {
       password: {
         type: Sequelize.STRING,
       },
+      email: {
+        type: Sequelize.STRING,
+      },
+      mobile: {
+        type: Sequelize.CHAR(20),
+      },
       hasVerified: {
         type: Sequelize.CHAR(10),
       },
