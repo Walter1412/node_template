@@ -25,6 +25,9 @@ module.exports = {
       email: {
         type: Sequelize.STRING,
       },
+      salt: {
+        type: Sequelize.STRING,
+      },
       mobile: {
         type: Sequelize.CHAR(20),
       },
@@ -54,6 +57,10 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('UserAccounts');
+    try {
+      await queryInterface.dropTable('UserAccounts');
+    } catch (error) {
+      throw error;
+    }
   },
 };

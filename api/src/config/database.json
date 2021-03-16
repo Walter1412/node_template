@@ -3,7 +3,7 @@
     "username": "cloud",
     "password": "Cloud1234",
     "database": "test",
-    "host": "10.1.1.80",
+    "host": "10.1.1.42",
     "port": "1066",
     "dialect": "mysql"
   },

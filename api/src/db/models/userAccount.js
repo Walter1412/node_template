@@ -35,6 +35,16 @@ module.exports = sequelize => {
         type: DataTypes.STRING,
         allowNull: false,
       },
+      email: {
+        type: DataTypes.STRING,
+        validate: {
+          isEmil: true,
+        },
+      },
+      mobile:{
+        type:DataTypes.CHAR(10),
+
+      },
       hasVerified: {
         type: DataTypes.CHAR(10),
         allowNull: false,

@@ -10,7 +10,13 @@ module.exports = {
      */
     return queryInterface.sequelize.transaction(t => {
       return Promise.all([
-        queryInterface.createTable('UserVerification', {
+        queryInterface.createTable('UserVerifications', {
+          id: {
+            allowNull: false,
+            autoIncrement: true,
+            primaryKey: true,
+            type: Sequelize.INTEGER,
+          },
           userAccountId: {
             allowNull: false,
             primaryKey: true,
@@ -25,10 +31,13 @@ module.exports = {
           type: {
             type: Sequelize.CHAR(10),
           },
+          code: {
+            type: Sequelize.STRING,
+          },
           time: {
             type: Sequelize.DATE,
           },
-          errCount: {
+          errorCount: {
             type: Sequelize.INTEGER,
           },
           hasVerified: {
@@ -54,14 +63,10 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    /**
-     * Add reverting commands here.
-     *
-     * Example:
-     * await queryInterface.dropTable('users');
-     */
-    return queryInterface.sequelize.transaction(t => {
-      return Promise.all([queryInterface.dropTable('UserVerification')]);
-    });
+    try {
+      await queryInterface.dropTable('UserVerifications');
+    } catch (error) {
+      throw error;
+    }
   },
 };

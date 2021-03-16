@@ -1,37 +1,58 @@
 import SequelizeLoader from '../loaders/sequelize';
+import { Sequelize, Model } from 'sequelize';
 import Logger from '../loaders/logger';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
 import { v1 as uuidv1 } from 'uuid';
 import UserAccountModel from '../db/models/userAccount.js';
+import UserVerificationModel from '../db/models/UserVerification.js';
 import config from '../config/index';
-import { randomBytes } from 'crypto';
+import { randomBytes, Certificate } from 'crypto';
 import { IUserAccount, IUserAccountInputDTO } from '../interfaces/IUserAccount';
+import { IUserVerification } from '../interfaces/IUserVerification';
 
 export default class Auth {
-  private UserAccount: any;
+  private UserAccount: Model;
+  private UserVerification: Model;
   private logger: any;
+  private sequelize: Sequelize;
   constructor() {
-    const sequelize = SequelizeLoader();
-    this.UserAccount = UserAccountModel(sequelize);
+    this.sequelize = SequelizeLoader();
+    this.UserAccount = UserAccountModel(this.sequelize);
+    this.UserVerification = UserVerificationModel(this.sequelize);
     this.logger = Logger;
   }
-  async signUp(userAccountInputDTO: IUserAccountInputDTO): Promise<{ createUserAccount: IUserAccount }> {
+  async signUp(
+    userAccountInputDTO: IUserAccountInputDTO,
+  ): Promise<{ createUserAccount: IUserAccount; createUserVerification: IUserVerification }> {
+    const t = await this.sequelize.transaction();
     try {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(userAccountInputDTO.password, { salt });
       this.logger.silly('Creating user db record');
 
-      const createUserAccount = await this.UserAccount.create({
-        ...userAccountInputDTO,
-        no: uuidv1(),
-        salt: salt.toString('hex'),
-        password: hashedPassword,
-      });
+      const createUserAccount = await this.UserAccount.create(
+        {
+          ...userAccountInputDTO,
+          no: uuidv1(),
+          salt: salt.toString('hex'),
+          password: hashedPassword,
+        },
+        { transaction: t },
+      );
 
-      return { createUserAccount };
+      const createUserVerification = await this.UserVerification.create(
+        {
+          userAccountId: createUserAccount.id,
+        },
+        { transaction: t },
+      );
+      await t.commit();
+
+      return { createUserAccount, createUserVerification };
     } catch (error) {
       this.logger.error(error);
+      await t.rollback();
       throw error;
     }
   }
