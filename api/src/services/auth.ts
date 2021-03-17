@@ -30,7 +30,6 @@ export default class Auth {
       const salt = randomBytes(32);
       const hashedPassword = await argon2.hash(userAccountInputDTO.password, { salt });
       this.logger.silly('Creating user db record');
-
       const createUserAccount = await this.UserAccount.create(
         {
           ...userAccountInputDTO,
@@ -40,7 +39,6 @@ export default class Auth {
         },
         { transaction: t },
       );
-
       const createUserVerification = await this.UserVerification.create(
         {
           userAccountId: createUserAccount.id,

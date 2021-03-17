@@ -1,6 +1,6 @@
 const { Sequelize } = require('sequelize');
 import Logger from './logger';
-const config = require('../config/database.json');
+import config from '../config/database.js';
 
 export default () => {
   const { development } = config;

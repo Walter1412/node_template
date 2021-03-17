@@ -45,9 +45,8 @@ export default async (app: Router) => {
   );
   /**
    * @typedef Signup
-   * @property {string} firstName.required - Some email or phone - eg: TestFirstName
-   * @property {string} lastName.required - Some password - eg: TestLastName
-   * @property {string} email.required - Some email or phone - eg: test@example.com
+   * @property {string} name.required - Some email or phone - eg: TestName
+   * @property {string} account.required - Some email or phone - eg: test@example.com
    * @property {string} password.required - Some password - eg: 123456
    */
   /**
@@ -63,9 +62,9 @@ export default async (app: Router) => {
     '/signup',
     celebrate({
       body: Joi.object({
-        name: Joi.string(),
-        account: Joi.string().required().email(),
-        password: Joi.string().required(),
+        name: Joi.string().max(100).trim(),
+        account: Joi.string().required().trim().email().max(100),
+        password: Joi.string().required().trim().alphanum().min(8).max(12),
       }),
     }),
     async (req: Request, res: Response) => {
