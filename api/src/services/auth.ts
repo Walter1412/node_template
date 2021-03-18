@@ -54,11 +54,11 @@ export default class Auth {
       throw error;
     }
   }
-  async signIn(email: string, password: string): Promise<{ token?: string }> {
+  async signIn(account: string, password: string): Promise<{ accessToken?: string; refreshToken?: string }> {
     try {
       const userRecord = await this.UserAccount.findOne({
         where: {
-          email,
+          account,
         },
       });
       if (!userRecord) throw new Error('User not registered');
@@ -68,8 +68,9 @@ export default class Auth {
       if (validPassword) {
         this.logger.silly('Password is valid!');
         this.logger.silly('Generating JWT');
-        const token = this.generateToken(userRecord);
-        return { token };
+        const accessToken = this.generateToken({ user: userRecord });
+        const refreshToken = this.generateToken({ user: userRecord, lifeTime: 60 * 60 * 24 * 2 });
+        return { accessToken, refreshToken };
       } else {
         throw new Error('Invalid Password');
       }
@@ -78,10 +79,10 @@ export default class Auth {
       throw error;
     }
   }
-  private generateToken(user: IUserAccount) {
+  private generateToken({ user, lifeTime = 60 * 60 * 24 * 1 }: { user: IUserAccount; lifeTime?: number }) {
     const today = new Date();
     const exp = new Date(today);
-    exp.setDate(today.getDate() + 60);
+    exp.setDate(today.getDate() + lifeTime);
     this.logger.silly(`Sign JWT for userId: ${user._id}`);
     return jwt.sign(
       {

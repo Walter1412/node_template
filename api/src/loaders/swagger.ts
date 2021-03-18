@@ -1,5 +1,6 @@
 import express, { Application, Request, Response, NextFunction } from 'express';
 const expressSwaggerGenerator = require('express-swagger-generator');
+import config from '../config';
 
 export default ({ app }: { app: Application }) => {
   const expressSwagger = expressSwaggerGenerator(app);
@@ -11,7 +12,7 @@ export default ({ app }: { app: Application }) => {
         version: '0.1.0',
       },
       host: 'localhost:3000',
-      basePath: '/api/',
+      basePath: `${config.api.prefix}/`,
       produces: ['application/json', 'application/xml'],
       schemes: ['http', 'https'],
       securityDefinitions: {
@@ -19,7 +20,7 @@ export default ({ app }: { app: Application }) => {
           type: 'apiKey',
           in: 'header',
           name: 'Authorization',
-          description: '',
+          description: 'test description',
         },
       },
     },

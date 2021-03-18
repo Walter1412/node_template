@@ -3,7 +3,7 @@ module.exports = {
     username: 'cloud',
     password: 'Cloud1234',
     database: 'test',
-    host: '10.1.1.68',
+    host: '10.1.1.77',
     port: '1066',
     dialect: 'mysql',
   },

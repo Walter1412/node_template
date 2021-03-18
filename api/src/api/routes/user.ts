@@ -12,7 +12,7 @@ export default async (app: Router) => {
   });
   /**
    * @typedef Signin
-   * @property {string} email.required - Some email or phone - eg: eerwrewrwr@example.com
+   * @property {string} account.required - Some email or phone - eg: eerwrewrwr@example.com
    * @property {string} password.required - Some password - eg: adsfafafaf
    */
   /**
@@ -27,17 +27,16 @@ export default async (app: Router) => {
     '/signin',
     celebrate({
       body: Joi.object({
-        email: Joi.string().required().email(),
-        password: Joi.string().required(),
+        account: Joi.string().required().email().max(100),
+        password: Joi.string().required().trim().alphanum().min(8).max(12),
       }),
     }),
     async (req: Request, res: Response) => {
       try {
         const { body } = req;
-        const { email, password } = body;
-
-        const { token } = await auth.signIn(email, password);
-        res.json(result.sucess()(token)).status(200).end();
+        const { account, password } = body;
+        const { accessToken, refreshToken } = await auth.signIn(account, password);
+        res.json(result.sucess()({ accessToken, refreshToken })).status(200).end();
       } catch (error) {
         res.json(result.fail()(error));
       }
