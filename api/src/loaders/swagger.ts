@@ -25,7 +25,7 @@ export default ({ app }: { app: Application }) => {
       },
     },
     basedir: __dirname, //app absolute path
-    files: ['../api/routes/*.ts'], //Path to the API handle folder
+    files: ['../api/routes/*.ts','../api/routes/*.js'], //Path to the API handle folder
   };
   expressSwagger(options);
 };

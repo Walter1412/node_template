@@ -4,16 +4,16 @@ import Logger from '../loaders/logger';
 import jwt from 'jsonwebtoken';
 import argon2 from 'argon2';
 import { v1 as uuidv1 } from 'uuid';
-import UserAccountModel from '../db/models/userAccount.js';
-import UserVerificationModel from '../db/models/UserVerification.js';
+import UserAccountModel from '../db/models/userAccount';
+import UserVerificationModel from '../db/models/userVerification';
 import config from '../config/index';
 import { randomBytes, Certificate } from 'crypto';
 import { IUserAccount, IUserAccountInputDTO } from '../interfaces/IUserAccount';
 import { IUserVerification } from '../interfaces/IUserVerification';
 
 export default class Auth {
-  private UserAccount: Model;
-  private UserVerification: Model;
+  private UserAccount: any;
+  private UserVerification: any;
   private logger: any;
   private sequelize: Sequelize;
   constructor() {

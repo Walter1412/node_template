@@ -44,6 +44,16 @@ npx sequelize-cli db:migrate
 npx sequelize-cli db:migrate:undo
 ```
 
+## Docker
+
+```bash
+docker build -t test1:v1 . --no-cache
+```
+
+```bash
+docker run -p 5000:3000 test1:v1
+```
+
 ## Loaders
 
 - [x] exprexx

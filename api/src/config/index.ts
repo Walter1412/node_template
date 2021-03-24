@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 
 // Set the NODE_ENV to 'development' by default
-process.env.NODE_ENV = process.env.NODE_ENV || 'development';
+// process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
 const envFound = dotenv.config();
 
@@ -15,6 +15,11 @@ export default {
   /**
    * Your favorite port
    */
+  nodeEnv: process.env.NODE_ENV || 'development',
+
+  /**
+   * Your favorite port
+   */
   port: parseInt(typeof process.env.PORT === 'string' ? process.env.PORT : '3000', 10),
 
   /**
@@ -25,8 +30,12 @@ export default {
   /**
    * Your secret sauce
    */
-  jwtSecret: process.env.JWT_SECRET || 'p4sta.w1th-b0logn3s3-s@uce',
-  jwtAlgorithm: process.env.JWT_ALGO || 'RS256',
+  accessTokenSecret: process.env.ACCESS_TOKEN_SECRET || 'p4sta.w1th-b0logn3s3-s@uce',
+  accessTokenAlgorithm: process.env.ACCESS_TOKEN_ALGO || 'RS256',
+  accessTokenLife: process.env.ACCESS_TOKEN_LIFE || 15,
+  refreshTokenSecret: process.env.REFRESH_TOKEN_SECRET || 'p4sta.w1th-b0logn3s3-s@uce',
+  refreshTokenAlgorithm: process.env.REFRESH_TOKEN_ALGO || 'RS256',
+  refreshTokenLife: process.env.REFRESH_TOKEN_LIFE || 15,
 
   /**
    * Used by winston logger
