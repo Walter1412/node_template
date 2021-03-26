@@ -7,6 +7,8 @@
     "dev": "nodemon",
     "build": "tsc",
     "start": "node build/app.js",
+    "copy_env": "sh ./shells/copy.sh",
+    "clear": "sh ./shells/clear.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -28,6 +30,8 @@
     "lodash": "^4.17.21",
     "method-override": "^3.0.0",
     "mysql2": "^2.2.5",
+    "nodemailer": "^6.5.0",
+    "randomatic": "^3.1.1",
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.6.2",
     "sqlite3": "^5.0.2",
@@ -42,6 +46,8 @@
     "@types/express": "^4.17.11",
     "@types/jsonwebtoken": "^8.5.1",
     "@types/node": "^14.14.35",
+    "@types/nodemailer": "^6.4.1",
+    "@types/randomatic": "^3.1.0",
     "@types/sequelize": "^4.28.9",
     "@typescript-eslint/eslint-plugin": "^4.19.0",
     "@typescript-eslint/parser": "^4.19.0",

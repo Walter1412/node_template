@@ -2,6 +2,9 @@ import { Router, Request, Response } from 'express';
 import { celebrate, Joi } from 'celebrate';
 import Auth from '../../services/auth';
 import Result from '../../services/result';
+import Emailer from '../../services/mailer';
+import { ITransporte } from '../../interfaces/IEmail';
+const emailer = new Emailer();
 const route = Router();
 const auth = new Auth();
 const result = new Result();
@@ -46,7 +49,7 @@ export default async (app: Router) => {
    * @typedef Signup
    * @property {string} name.required - Some email or phone - eg: TestName
    * @property {string} account.required - Some email or phone - eg: test@example.com
-   * @property {string} password.required - Some password - eg: 123456
+   * @property {string} password.required - Some password - eg: 12345678
    */
   /**
    * This function comment is parsed by doctrine
@@ -70,7 +73,15 @@ export default async (app: Router) => {
       try {
         const { body } = req;
         const { name, account, password } = body;
-        const { createUserAccount } = await auth.signUp({ name, account, password });
+        const { createUserAccount, createUserVerification } = await auth.signUp({ name, account, password });
+        const transport: ITransporte = {
+          from: 'test@test.com',
+          to: createUserAccount.account,
+          subject: 'Test subject',
+          text: 'Test text',
+          html: `verification code:${createUserVerification.code}`,
+        };
+        emailer.send(transport);
         res.json(result.sucess()(createUserAccount)).status(200).end();
       } catch (error) {
         res.json(result.fail()(error));

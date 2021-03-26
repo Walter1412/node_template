@@ -69,8 +69,10 @@ export default {
   /**
    * Mailgun email credentials
    */
-  // emails: {
-  //   apiKey: process.env.MAILGUN_API_KEY,
-  //   domain: process.env.MAILGUN_DOMAIN
-  // }
+  emails: {
+    SMTP: {
+      account: process.env.MAIL_SMTP_ACCOUNT,
+      password: process.env.MAIL_SMTP_PASSWORD,
+    },
+  },
 };

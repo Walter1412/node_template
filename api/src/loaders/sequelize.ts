@@ -1,10 +1,12 @@
 const { Sequelize } = require('sequelize');
 import Logger from './logger';
-import config from '../config/database.js';
+import sqlConfig from '../config/sql.js';
+import config from '../config/index';
+import { ISql } from '../interfaces/ISql';
 
 export default () => {
-  const { development } = config;
-  const { database, username, password, host, port, dialect } = development;
+  const sql: ISql = sqlConfig;
+  const { database, username, password, host, port, dialect } = sql[config.nodeEnv];
   const sequelize = new Sequelize(database, username, password, {
     host,
     port,

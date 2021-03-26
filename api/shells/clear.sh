@@ -1,7 +1,4 @@
-if [ -d "./build" ]; then
-  rm -rf bundle
+if [ -d "./node_modules" ]; then
+  rm -rf node_modules
 fi
-
-# cp -r src/components/ bundle/components
-
-# cp -r src/assets/styles bundle/styles
+rm -rf package-lock.json

@@ -10,6 +10,7 @@ import config from '../config/index';
 import { randomBytes, Certificate } from 'crypto';
 import { IUserAccount, IUserAccountInputDTO } from '../interfaces/IUserAccount';
 import { IUserVerification } from '../interfaces/IUserVerification';
+import randomize from 'randomatic';
 
 export default class Auth {
   private UserAccount: any;
@@ -42,6 +43,7 @@ export default class Auth {
       const createUserVerification = await this.UserVerification.create(
         {
           userAccountId: createUserAccount.id,
+          code: randomize('0', 6),
         },
         { transaction: t },
       );
@@ -90,7 +92,7 @@ export default class Auth {
         email: user.account,
         exp: exp.getTime() / 1000,
       },
-      config.jwtSecret,
+      config.accessTokenSecret,
     );
   }
 }
