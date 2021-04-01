@@ -21,6 +21,10 @@ module.exports = {
             allowNull: false,
             primaryKey: true,
             type: Sequelize.INTEGER,
+            references: {
+              model: 'UserAccounts',
+              key: 'id',
+            },
           },
           sendTime: {
             type: Sequelize.DATE,

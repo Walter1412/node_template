@@ -10,6 +10,7 @@ import config from '../config/index';
 import { randomBytes, Certificate } from 'crypto';
 import { IUserAccount, IUserAccountInputDTO } from '../interfaces/IUserAccount';
 import { IUserVerification } from '../interfaces/IUserVerification';
+import randomize from 'randomatic';
 
 export default class Auth {
   private UserAccount: any;
@@ -42,6 +43,7 @@ export default class Auth {
       const createUserVerification = await this.UserVerification.create(
         {
           userAccountId: createUserAccount.id,
+          code: randomize('0', 6),
         },
         { transaction: t },
       );
@@ -79,6 +81,19 @@ export default class Auth {
       throw error;
     }
   }
+  async verifiation(account: string, code: number) {
+    try {
+      const userRecord = await this.UserAccount.findOne({
+        include: [{
+          model: this.UserVerification,
+          right: true // will create a right join
+        }]
+      });
+      console.log('userRecord :>> ', userRecord);
+    } catch (error) {
+      throw error;
+    }
+  }
   private generateToken({ user, lifeTime = 60 * 60 * 24 * 1 }: { user: IUserAccount; lifeTime?: number }) {
     const today = new Date();
     const exp = new Date(today);
@@ -90,7 +105,7 @@ export default class Auth {
         email: user.account,
         exp: exp.getTime() / 1000,
       },
-      config.jwtSecret,
+      config.accessTokenSecret,
     );
   }
 }

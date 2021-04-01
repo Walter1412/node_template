@@ -1,5 +1,17 @@
 # node_template
 
+## Copy .env
+
+```bash
+npm run copy_env
+```
+
+## Remove node_modules and package-lock.json
+
+```bash
+npm run clear
+```
+
 ## Develop
 
 ```bash
@@ -18,7 +30,7 @@ npm run start
 - config path
 
 `
-/src/config/database.js
+/src/config/sql.js
 `
 
 - sequelize setting file path
@@ -47,16 +59,16 @@ npx sequelize-cli db:migrate:undo
 ## Docker
 
 ```bash
-docker build -t test1:v1 . --no-cache
+docker build -t ci-module:v1.0.0 . --no-cache
 ```
 
 ```bash
-docker run -p 5000:3000 test1:v1
+docker run -p 5000:3000 ci-module:v1.0.0
 ```
 
 ## Loaders
 
-- [x] exprexx
+- [x] express
 - [x] logger
 - [x] sequelize
 - [x] swagger
