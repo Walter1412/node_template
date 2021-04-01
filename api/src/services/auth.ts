@@ -81,6 +81,19 @@ export default class Auth {
       throw error;
     }
   }
+  async verifiation(account: string, code: number) {
+    try {
+      const userRecord = await this.UserAccount.findOne({
+        include: [{
+          model: this.UserVerification,
+          right: true // will create a right join
+        }]
+      });
+      console.log('userRecord :>> ', userRecord);
+    } catch (error) {
+      throw error;
+    }
+  }
   private generateToken({ user, lifeTime = 60 * 60 * 24 * 1 }: { user: IUserAccount; lifeTime?: number }) {
     const today = new Date();
     const exp = new Date(today);

@@ -68,7 +68,7 @@ docker run -p 5000:3000 ci-module:v1.0.0
 
 ## Loaders
 
-- [x] exprexx
+- [x] express
 - [x] logger
 - [x] sequelize
 - [x] swagger

@@ -79,13 +79,44 @@ export default async (app: Router) => {
           to: createUserAccount.account,
           subject: 'Test subject',
           text: 'Test text',
-          html: `verification code:${createUserVerification.code}`,
+          html: `<div>verification code:${createUserVerification.code}</div><div>Account:${createUserAccount.account}</div>`,
         };
         emailer.send(transport);
         res.json(result.sucess()(createUserAccount)).status(200).end();
       } catch (error) {
         res.json(result.fail()(error));
       }
+    },
+  );
+
+  /**
+   * @typedef Verifiation
+   * @property {string} account.required - Some email or phone - eg: test@example.com
+   * @property {integer} code.required - Some password - eg: 12345678
+   */
+  /**
+   * This function comment is parsed by doctrine
+   * @route POST /user/verifiation
+   * @group User - Operations about user
+   * @param {Verifiation.model} content.body.required - the new point
+   * @returns {object} 200 - An array of user info
+   * @returns {Error}  default - Unexpected error
+   */
+
+  route.post(
+    '/verifiation',
+    celebrate({
+      body: Joi.object({
+        name: Joi.string().max(100).trim(),
+        account: Joi.string().required().trim().email().max(100),
+        code: Joi.number().required(),
+      }),
+    }),
+    async (req: Request, res: Response) => {
+      const { body } = req;
+      const { account, code } = body;
+      auth.verifiation(account, code);
+      res.json().status(200).end();
     },
   );
 };
